@@ -42,11 +42,34 @@ export const AuthContextProvider = ({ children }) => {
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider).then((result) => {
+      // const token = result.credential.accessToken;
+      const user = result.user;
+      postSignInData(user);
+    });
   };
 
   const logOut = () => {
     signOut(auth);
+  };
+
+  const postSignInData = (user) => {
+    console.log("POSTING FROM AUTH ITSELF:", user);
+    console.log(user.uid, user.email, user.displayName);
+    fetch("/api/storeUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Success:", data))
+      .catch((error) => console.error("Error:", error));
   };
 
   // useEffect(() => {

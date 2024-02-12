@@ -106,36 +106,36 @@ const Page = () => {
     router.replace("/client/Login");
   };
 
-  useEffect(() => {
-    if (user) {
-      // const uid = user.uid;
-      // const email = user.email;
-      // const displayName = user.displayName;
-      const uid = "test1234new";
-      const email = "test@example.com";
-      const displayName = "TestUser";
-      console.log("User has signed in, attempting to post user info:");
-      console.log(uid, email, displayName);
-      fetch("/api/storeUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: uid,
-          email: email,
-          displayName: displayName,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Successfully posted user login info to MongoDB", data);
-          // Redirect or perform additional actions upon successful POST
-          router.push("/");
-        })
-        .catch((error) => console.error("Error storing user:", error));
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     // const uid = user.uid;
+  //     // const email = user.email;
+  //     // const displayName = user.displayName;
+  //     const uid = "test1234new";
+  //     const email = "test@example.com";
+  //     const displayName = "TestUser";
+  //     console.log("User has signed in, attempting to post user info:");
+  //     console.log(uid, email, displayName);
+  //     fetch("/api/storeUser", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uid: uid,
+  //         email: email,
+  //         displayName: displayName,
+  //       }),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log("Successfully posted user login info to MongoDB", data);
+  //         // Redirect or perform additional actions upon successful POST
+  //         router.push("/");
+  //       })
+  //       .catch((error) => console.error("Error storing user:", error));
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
