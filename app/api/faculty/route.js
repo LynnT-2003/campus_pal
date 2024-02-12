@@ -12,6 +12,7 @@ export async function POST(req, res) {
   await connectMongoDB();
   try {
     const faculty = await Faculty.create({ facultyName, courses });
+    console.log("Successfully created Faculty!");
     return NextResponse.json(
       { message: "Faculty created successfully!" },
       { status: 200 }
@@ -32,6 +33,7 @@ export async function GET(req, res) {
   await connectMongoDB();
   try {
     const faculties = await Faculty.find({});
+    console.log("Successfully received Faculties.");
     return NextResponse.json(
       { message: "Successfully received Faculties." },
       { status: 400 }
@@ -41,3 +43,11 @@ export async function GET(req, res) {
     return NextResponse.json({ message: "Error receiving Faculties." });
   }
 }
+
+// TODO: PUT method for updating Faculty (eg. new Courses, new Course Schedules, etc.)
+export async function PUT(req, res) {
+  console.log("Faculty PUT request", req.body);
+}
+
+// I dont think we will have DELETE method
+// just use [...] and PUT method for updating Faculty to delete a course, etc.
