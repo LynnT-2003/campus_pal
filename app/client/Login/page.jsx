@@ -69,6 +69,7 @@ const Page = () => {
           displayName: user.displayName,
         }),
       })
+        .then((response) => response.json())
         .then(console.log("Successfully posted user login info to MongoDB"))
         .catch((error) => console.error("Error storing user:", error));
 
