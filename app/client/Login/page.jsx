@@ -1,43 +1,5 @@
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
-// import Button from "@mui/material/Button";
-// import { Box } from "@mui/material";
-// import { UserAuth } from "@/app/auth/AuthContext";
-// const Page = () => {
-//   const router = useRouter();
-//   const { user, signInWithGoogle } = UserAuth();
-//   // console.log("User", user);
-//   useEffect(() => {
-//     if (user) {
-//       router.push("/");
-//     }
-//   }, [user, router]);
-
-//   const handleSignIn = async () => {
-//     try {
-//       await signInWithGoogle();
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Box sx={{ marginTop: "80px" }}>
-//         <div>Client Login Page</div>
-//         <Button onClick={handleSignIn}>Sign in with Google</Button>
-//       </Box>
-//     </>
-//   );
-// };
-
-// export default Page;
-
 "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@mui/material/Button";
 import { Box, Typography } from "@mui/material";
@@ -47,40 +9,11 @@ const Page = () => {
   const router = useRouter();
   const { user, signInWithGoogle } = UserAuth();
 
-  // useEffect(() => {
-  //   // Assuming `user` is updated asynchronously somewhere after successful sign-in
-  //   if (user) {
-  //     router.push("/");
-  //   }
-  // }, [user, router]); // Depend on `user` to ensure it's updated before running this effect
-
   useEffect(() => {
     if (user) {
-      // console.log("USER HAS SIGNED IN", user);
-      // // This ensures we only make the API call when user data is available
-      // fetch("/api/storeUser", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     uid: user.uid,
-      //     email: user.email,
-      //     displayName: user.displayName,
-      //   }),
-      // })
-      //   .then((response) => response.json())
-      //   .then(console.log("Successfully posted user login info to MongoDB"))
-      //   .catch((error) => console.error("Error storing user:", error));
+      // Assuming user is already signed in and we have the user object
+      console.log("User has signed in, attempting to post user info");
 
-      router.push("/");
-    }
-  }, [user, router]); // Depend on `user` to ensure it's updated before running this effect
-
-  useEffect(() => {
-    if (user) {
-      console.log("USER HAS SIGNED IN", user);
-      // This ensures we only make the API call when user data is available
       fetch("/api/storeUser", {
         method: "POST",
         headers: {
@@ -93,36 +26,21 @@ const Page = () => {
         }),
       })
         .then((response) => response.json())
-        .then(console.log("Successfully posted user login info to MongoDB"))
+        .then((data) => {
+          console.log("Successfully posted user login info to MongoDB", data);
+          // Redirect or perform additional actions upon successful POST
+          router.push("/");
+        })
         .catch((error) => console.error("Error storing user:", error));
     }
-  }, [user]);
+  }, [user, router]);
 
   const handleSignIn = async () => {
     try {
-      console.log("SIGNING IN");
+      console.log("Attempting to sign in");
       await signInWithGoogle();
-      // console.log("TO POST:", user.uid, user.email, user.displayName);
-      console.log("USER HAS SIGNED IN");
-      // Now make the API call here or ensure this effect runs after user is updated
-      if (user) {
-        // Assuming 'user' contains the Firebase user object after successful sign-in
-        fetch("/api/storeUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-          }),
-        });
-      } else {
-        console.log("NO USER FOUND TO POST");
-      }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Error during sign in:", error);
     }
   };
 
@@ -137,30 +55,16 @@ const Page = () => {
         backgroundColor: "#f0f2f5",
       }}
     >
-      <Box
-        sx={{
-          marginBottom: "20vh",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          display: "flex",
-        }}
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Welcome to Tutor Plus
+      </Typography>
+      <Button
+        variant="outlined"
+        onClick={handleSignIn}
+        sx={{ textTransform: "none" }}
       >
-        <Box>
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            Welcome to Tutor Plus
-          </Typography>
-          {/* <Typography variant="subtitle1">Studying made easy</Typography> */}
-        </Box>
-
-        <Button
-          variant="outlined"
-          onClick={handleSignIn}
-          sx={{ textTransform: "none" }}
-        >
-          Sign in with Google
-        </Button>
-      </Box>
+        Sign in with Google
+      </Button>
     </Box>
   );
 };
