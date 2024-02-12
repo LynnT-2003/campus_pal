@@ -15,24 +15,54 @@ export async function POST(req, res) {
     { message: "Model created successfully!" },
     { status: 200 }
   );
-
-  // const { uid, email, displayName } = await req.json();
-
-  // console.log({ uid, email, displayName }); // Check if fields are populated
-
-  // if (!uid || !email || !displayName) {
-  //   return res.status(400).json({ message: "Missing required fields" });
-  // }
-
-  // try {
-  //   let user = await User.findOne({ uid });
-  //   if (!user) {
-  //     user = new User({ uid, email, displayName });
-  //     await user.save();
-  //   }
-  //   res.status(200).json({ message: "User stored successfully", user });
-  // } catch (error) {
-  //   console.error("Error storing user:", error);
-  //   res.status(500).json({ message: "Error storing user" });
-  // }
 }
+
+// import connectMongoDB from "@/app/libs/connectMongoDB";
+// import User from "@/app/models/User";
+
+// // Handling POST request
+// export async function POST(req, res) {
+//   try {
+//     // Await the parsing of JSON body
+//     const { uid, email, displayName } = await req.json();
+
+//     // Ensure connection to MongoDB
+//     await connectMongoDB();
+
+//     // Check if the user already exists
+//     let user = await User.findOne({ uid });
+//     if (!user) {
+//       // Create a new user if it doesn't exist
+//       user = await User.create({ uid, email, displayName });
+//       console.log("User created successfully");
+//       return NextResponse.json(
+//         { message: "Model created successfully!" },
+//         { status: 200 }
+//       );
+//     } else {
+//       console.log("User already exists");
+//       return NextResponse.json(
+//         { message: "User already exists" },
+//         { status: 200 }
+//       );
+//     }
+//   } catch (error) {
+//     console.error("Error storing user:", error);
+//     return NextResponse.json(
+//       { message: "Error created successfully!" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// // Handling GET request (Example function, adjust according to your needs)
+// export async function GET(req, res) {
+//   try {
+//     await connectMongoDB();
+//     const users = await User.find({});
+//     return res.status(200).json(users);
+//   } catch (error) {
+//     console.error("Error fetching users:", error);
+//     return res.status(500).json({ message: "Error fetching users" });
+//   }
+// }

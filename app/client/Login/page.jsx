@@ -9,31 +9,31 @@ const Page = () => {
   const router = useRouter();
   const { user, signInWithGoogle } = UserAuth();
 
-  useEffect(() => {
-    if (user) {
-      // Assuming user is already signed in and we have the user object
-      console.log("User has signed in, attempting to post user info");
+  // useEffect(() => {
+  //   if (user) {
+  //     // Assuming user is already signed in and we have the user object
+  //     console.log("User has signed in, attempting to post user info");
 
-      fetch("/api/storeUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Successfully posted user login info to MongoDB", data);
-          // Redirect or perform additional actions upon successful POST
-          router.push("/");
-        })
-        .catch((error) => console.error("Error storing user:", error));
-    }
-  }, [user, router]);
+  //     fetch("/api/storeUser", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uid: user.uid,
+  //         email: user.email,
+  //         displayName: user.displayName,
+  //       }),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log("Successfully posted user login info to MongoDB", data);
+  //         // Redirect or perform additional actions upon successful POST
+  //         router.push("/");
+  //       })
+  //       .catch((error) => console.error("Error storing user:", error));
+  //   }
+  // }, [user, router]);
 
   const handleSignIn = async () => {
     try {
@@ -42,6 +42,28 @@ const Page = () => {
     } catch (error) {
       console.error("Error during sign in:", error);
     }
+  };
+
+  const handlePost = () => {
+    console.log("User has signed in, attempting to post user info");
+    fetch("/api/storeUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Successfully posted user login info to MongoDB", data);
+        // Redirect or perform additional actions upon successful POST
+        router.push("/");
+      })
+      .catch((error) => console.error("Error storing user:", error));
   };
 
   return (
@@ -64,6 +86,14 @@ const Page = () => {
         sx={{ textTransform: "none" }}
       >
         Sign in with Google
+      </Button>
+      <Button
+        variant="outlined"
+        onClick={handlePost}
+        sx={{ textTransform: "none" }}
+        className="mt-5 p-2 pb-0"
+      >
+        POST
       </Button>
     </Box>
   );
