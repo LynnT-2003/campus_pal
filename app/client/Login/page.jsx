@@ -56,6 +56,29 @@ const Page = () => {
 
   useEffect(() => {
     if (user) {
+      // console.log("USER HAS SIGNED IN", user);
+      // // This ensures we only make the API call when user data is available
+      // fetch("/api/storeUser", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     uid: user.uid,
+      //     email: user.email,
+      //     displayName: user.displayName,
+      //   }),
+      // })
+      //   .then((response) => response.json())
+      //   .then(console.log("Successfully posted user login info to MongoDB"))
+      //   .catch((error) => console.error("Error storing user:", error));
+
+      router.push("/");
+    }
+  }, [user, router]); // Depend on `user` to ensure it's updated before running this effect
+
+  useEffect(() => {
+    if (user) {
       console.log("USER HAS SIGNED IN", user);
       // This ensures we only make the API call when user data is available
       fetch("/api/storeUser", {
@@ -72,10 +95,8 @@ const Page = () => {
         .then((response) => response.json())
         .then(console.log("Successfully posted user login info to MongoDB"))
         .catch((error) => console.error("Error storing user:", error));
-
-      router.push("/");
     }
-  }, [user, router]); // Depend on `user` to ensure it's updated before running this effect
+  }, [user]);
 
   const handleSignIn = async () => {
     try {
