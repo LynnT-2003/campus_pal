@@ -106,40 +106,22 @@ const Page = () => {
     router.replace("/client/Login");
   };
 
-  const handlePost = () => {
-    console.log("User has signed in, attempting to post user info");
-    fetch("/api/storeUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Successfully posted user login info to MongoDB", data);
-        // Redirect or perform additional actions upon successful POST
-        router.push("/");
-      })
-      .catch((error) => console.error("Error storing user:", error));
-  };
-
   useEffect(() => {
     if (user) {
-      console.log("User has signed in, attempting to post user info");
+      const uid = user.uid;
+      const email = user.email;
+      const displayName = user.displayName;
+      console.log("User has signed in, attempting to post user info:");
+      console.log(uid, email, displayName);
       fetch("/api/storeUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
+          uid: uid,
+          email: email,
+          displayName: displayName,
         }),
       })
         .then((response) => response.json())
