@@ -4,8 +4,9 @@ import { NextResponse } from "next/server";
 
 // Export a named function for the POST method
 export async function POST(req, res) {
-  console.log("User post request", req.body);
+  // console.log("User post request", req.body);
   const { uid, email, displayName } = await req.json();
+  // console.log("User post request", uid, email, displayName);
   await connectMongoDB();
   // let user = await User.findOne({ uid });
   // if (!user) {
@@ -13,7 +14,7 @@ export async function POST(req, res) {
   // }
   await User.create({ uid, email, displayName });
   return NextResponse.json(
-    { message: "Model created successfully!" },
+    { message: "User created successfully!" },
     { status: 200 }
   );
 }
