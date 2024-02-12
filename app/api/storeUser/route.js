@@ -7,10 +7,11 @@ export async function POST(req, res) {
   console.log("User post request", req.body);
   const { uid, email, displayName } = await req.json();
   await connectMongoDB();
-  let user = await User.findOne({ uid });
-  if (!user) {
-    await User.create({ uid, email, displayName });
-  }
+  // let user = await User.findOne({ uid });
+  // if (!user) {
+  //   await User.create({ uid, email, displayName });
+  // }
+  await User.create({ uid, email, displayName });
   return NextResponse.json(
     { message: "Model created successfully!" },
     { status: 200 }
