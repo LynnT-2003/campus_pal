@@ -168,7 +168,7 @@ const Page = () => {
       // Now make the API call here or ensure this effect runs after user is updated
       if (user) {
         // Assuming 'user' contains the Firebase user object after successful sign-in
-        fetch("http://localhost:3000/api/storeUser", {
+        fetch("https://lynn-tutorplus.vercel.app/api/storeUser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
