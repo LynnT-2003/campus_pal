@@ -19,6 +19,12 @@ export async function POST(req, res) {
   );
 }
 
+export async function GET() {
+  await connectMongoDB();
+  const users = await User.find({});
+  return NextResponse.json(users, { status: 200 });
+}
+
 // import connectMongoDB from "@/app/libs/connectMongoDB";
 // import User from "@/app/models/User";
 // import { NextResponse } from "next/server";
