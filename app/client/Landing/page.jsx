@@ -19,24 +19,28 @@ import { UserAuth } from "@/app/auth/AuthContext";
 
 // const dummyOfferedCoursesData = [
 //   {
+//     _id: "65702602b5fe0cd9b23847aa",
 //     title: "Principles of Statistics",
-//     prerequisite: "None",
-//     location: "TrueLab",
+//     Prerequisite: ["None"],
+//     Location: "TrueLab",
 //   },
 //   {
+//     _id: "65702671b5fe0cd9b23847ab",
 //     title: "Fundamentals of Programming",
-//     prerequisite: "None",
-//     location: "TrueLab",
+//     Prerequisite: ["None"],
+//     Location: "TrueLab",
 //   },
 //   {
+//     _id: "657026fab5fe0cd9b23847ac",
 //     title: "Object-Oriented Programming",
-//     prerequisite: "CSX-3001",
-//     location: "TrueLab",
+//     Location: "TrueLab",
+//     Prerequisite: ["CSX3001"],
 //   },
 //   {
+//     _id: "65702746b5fe0cd9b23847ad",
 //     title: "Data Structure & Algorithms",
-//     prerequisite: "None",
-//     location: "TrueLab",
+//     Prerequisite: ["CSX3002"],
+//     Location: "TrueLab",
 //   },
 // ];
 
@@ -75,106 +79,113 @@ const Page = () => {
       router.push("/client/Login");
     } else {
       setRender(true);
-      // const fetchData = async () => {
-      //   try {
-      //     const response = await fetch(
-      //       "https://tutorplus-backend.vercel.app/api/offeredCourses"
-      //     ); // Replace with your actual API endpoint
-      //     const data = await response.json();
-      //     setOfferedCoursesData(data);
-      //     setLoading(false); // Assuming your API response is an array of anime objects
-      //   } catch (error) {
-      //     console.error("Error fetching data:", error);
-      //   }
-      // };
-
-      // fetchData();
     }
   }, []);
 
   const [offeredCoursesData, setOfferedCoursesData] = useState([]);
 
-  // Add the useRouter hook
   const router = useRouter();
 
-  // Function to handle signout
   const handleSignOut = () => {
-    // Clear isLoggedIn state in local storage
     localStorage.clear();
-
-    // Redirect the user to the login page
     router.replace("/client/Login");
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     // const uid = user.uid;
-  //     // const email = user.email;
-  //     // const displayName = user.displayName;
-  //     const uid = "test1234new";
-  //     const email = "test@example.com";
-  //     const displayName = "TestUser";
-  //     console.log("User has signed in, attempting to post user info:");
-  //     console.log(uid, email, displayName);
-  //     fetch("/api/storeUser", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         uid: uid,
-  //         email: email,
-  //         displayName: displayName,
-  //       }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log("Successfully posted user login info to MongoDB", data);
-  //         // Redirect or perform additional actions upon successful POST
-  //         router.push("/");
-  //       })
-  //       .catch((error) => console.error("Error storing user:", error));
-  //   }
-  // }, [user]);
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://tutorplus-backend.vercel.app/api/offeredCourses"
-        ); // Replace with your actual API endpoint
-        const data = await response.json();
-        setOfferedCoursesData(data);
-        setLoading(false); // Assuming your API response is an array of anime objects
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    // Attempt to load data from localStorage first
+    const cachedData = localStorage.getItem("cachedOfferedCoursesData");
+    if (cachedData) {
+      console.log("Loading data from cache...", cachedData);
+      setOfferedCoursesData(JSON.parse(cachedData));
+      setLoading(false);
+      // Still fetch in background
+      const fetchData = async () => {
+        try {
+          console.log("Fetching offeredCoursesData in background...");
+          const response = await fetch(
+            "https://tutorplus-backend.vercel.app/api/offeredCourses"
+          );
+          const data = await response.json();
+          setOfferedCoursesData(data);
+          localStorage.setItem(
+            "cachedOfferedCoursesData",
+            JSON.stringify(data)
+          ); // Cache the fetched data
+          console.log("Fetched", data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
+    } else {
+      // If no data in localStorage, fetch it from the API
+      const fetchData = async () => {
+        try {
+          console.log("Fetching offeredCoursesData...");
+          const response = await fetch(
+            "https://tutorplus-backend.vercel.app/api/offeredCourses"
+          );
+          const data = await response.json();
+          setOfferedCoursesData(data);
+          localStorage.setItem(
+            "cachedOfferedCoursesData",
+            JSON.stringify(data)
+          ); // Cache the fetched data
+          setLoading(false);
+          console.log("Fetched", data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setLoading(false); // Set loading to false even if there's an error
+        }
+      };
+      fetchData();
+    }
   }, []);
 
+  // useEffect(() => {
+  //   // Attempt to load data from localStorage first
+  //   const cachedData = localStorage.getItem("cachedOfferedCoursesData");
+  //   if (cachedData) {
+  //     console.log("Loading data from cache...");
+  //     setOfferedCoursesData(JSON.parse(cachedData));
+  //     // Don't setLoading(false) here to allow fetch update
+  //   }
+
+  //   // Fetch new data from the API
+  //   console.log("Fetching offeredCoursesData from API...");
+  //   fetch("https://tutorplus-backend.vercel.app/api/offeredCourses")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Fetched", data);
+  //       // Update state with fetched data
+  //       setOfferedCoursesData(data);
+  //       // Cache the fetched data
+  //       localStorage.setItem("cachedOfferedCoursesData", JSON.stringify(data));
+  //       // Now setLoading(false) after fetching and caching
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //       setLoading(false); // Ensure loading is false even in case of error
+  //     });
+  // }, []);
+
   const titleStyle = {
-    // fontWeight: "bold", // Make it bold
-    fontFamily: "Poppins, sans-serif", // Choose a suitable font family
+    fontFamily: "Poppins, sans-serif",
     fontWeight: "bold",
-    color: "#D21F3C", // Set your desired text color
-    textAlign: "center", // Center align the title
+    color: "#D21F3C",
+    textAlign: "center",
   };
 
-  // State to control the visibility of the dialog
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  // State to store the selected course when a card is clicked
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // Event handler to open the dialog and set the selected course
   const handleCardClick = (course) => {
     setSelectedCourse(course);
     setDialogOpen(true);
   };
 
-  // Event handler to close the dialog
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
@@ -197,7 +208,6 @@ const Page = () => {
 
   if (render) {
     if (loading) {
-      // Render the loading GIF while fetching tasks
       return (
         <div className="flex justify-center items-center">
           <h1>Cooking your courses ^^</h1>
@@ -275,12 +285,12 @@ const Page = () => {
                   }}
                 >
                   <img
-                    src="/confirm.svg" // Replace with the actual path to your image in the public folder
+                    src="/confirm.svg"
                     alt="Confirmation Image"
                     style={{
-                      width: "100px", // Adjust the width as needed
-                      height: "auto", // Maintain aspect ratio
-                      marginRight: "1em", // Add spacing between the image and text
+                      width: "100px",
+                      height: "auto",
+                      marginRight: "1em",
                     }}
                   />
                   <span>Select your schedule after confirmation.</span>
@@ -316,12 +326,12 @@ const Page = () => {
           autoHideDuration={4000}
           onClose={closeSuccessNotification}
           anchorOrigin={{
-            vertical: "top", // Show the notification at the top
-            horizontal: "center", // Center it horizontally
+            vertical: "top",
+            horizontal: "center",
           }}
           style={{
-            paddingTop: "20px", // Add padding to the top
-            transition: "opacity 2s ease-in-out", // Adjust the duration as needed
+            paddingTop: "20px",
+            transition: "opacity 2s ease-in-out",
           }}
         >
           <MuiAlert
@@ -337,9 +347,8 @@ const Page = () => {
       </>
     );
   } else {
-    // do nothing
+    return null;
   }
 };
-// export default Page;
 
 export default Page;
