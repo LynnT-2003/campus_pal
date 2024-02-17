@@ -161,27 +161,8 @@ const Page = () => {
 
   const handleSignIn = async () => {
     try {
-      console.log("SIGNING IN");
+      console.log("Handling sign in...");
       await signInWithGoogle();
-      // console.log("TO POST:", user.uid, user.email, user.displayName);
-      console.log("USER HAS SIGNED IN");
-      // Now make the API call here or ensure this effect runs after user is updated
-      if (user) {
-        // Assuming 'user' contains the Firebase user object after successful sign-in
-        fetch("https://lynn-tutorplus.vercel.app/api/storeUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-          }),
-        });
-      } else {
-        console.log("NO USER FOUND TO POST");
-      }
     } catch (err) {
       console.error(err);
     }
