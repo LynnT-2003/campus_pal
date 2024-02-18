@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
 .my-div {
   padding-top: 10px;
   padding-right: 12em;
@@ -14,6 +16,10 @@ body {
   /* background-image: url('/bg.jpg'); Replace 'bg.jpg' with the actual filename */
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.brandName {
+  font-family: 'Outfit', sans-serif;
 }
 
 

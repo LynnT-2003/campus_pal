@@ -6,7 +6,6 @@
 // import { AuthContextProvider } from "./auth/AuthContext";
 // import withAuth from "./auth/WithAuth"
 
-
 // const inter = Inter({ subsets: ["latin"] });
 // const chakra = Chakra_Petch({
 //   subsets: ["latin"],
@@ -42,11 +41,12 @@
 //     </html>
 //   );
 // }
-
+"use client";
 import "./globals.css";
 import { Inter, Chakra_Petch } from "next/font/google";
 import NavBar from "./components/NavBar/page";
 import { AuthContextProvider } from "./auth/AuthContext";
+import React, { useState, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 const chakra = Chakra_Petch({
@@ -55,17 +55,27 @@ const chakra = Chakra_Petch({
 });
 
 export default function RootLayout({ children }) {
+  const [showNavBar, setShowNavBar] = useState(true);
+
+  useEffect(() => {
+    // This ensures code runs only on the client side
+    const path = window.location.pathname;
+    // Logic to hide NavBar on specific routes
+    if (path === "/admin/Dashboard") {
+      setShowNavBar(false);
+    } else {
+      setShowNavBar(true);
+    }
+  }, []);
+
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AuthContextProvider>
-          <NavBar />
-          <div>
-            {children}
-          </div>
+          {showNavBar && <NavBar />}
+          <div>{children}</div>
         </AuthContextProvider>
       </body>
     </html>
   );
 }
-
